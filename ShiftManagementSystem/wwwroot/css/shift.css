@@ -1,0 +1,449 @@
+﻿/* --- 基礎設定與變數 --- */
+:root {
+    --primary: #667eea;
+    --primary-hover: #5568d3;
+    --secondary: #e5e7eb;
+    --success: #4ade80;
+    --warning: #facc15;
+    --error: #ef4444;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+    --bg-light: #f9fafb;
+}
+
+[v-cloak] {
+    display: none !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+}
+
+/* --- 佈局容器 --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    gap: 16px;
+}
+
+    .header-section h3 {
+        margin: 0 0 8px 0;
+    }
+
+    .header-section p {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+
+/* --- 字體與標題 --- */
+h2 {
+    margin: 0 0 20px 0;
+    font-size: 28px;
+}
+
+h3 {
+    margin: 20px 0 12px 0;
+    font-size: 18px;
+}
+
+h4 {
+    margin: 12px 0 8px 0;
+    font-size: 16px;
+}
+
+label {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+.text-muted {
+    color: var(--text-light);
+}
+
+/* --- 按鈕與輸入框 --- */
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .btn.primary {
+        background: var(--primary);
+        color: white;
+    }
+
+        .btn.primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+    .btn.secondary {
+        background: var(--secondary);
+        color: var(--text-dark);
+    }
+
+        .btn.secondary:hover:not(:disabled) {
+            background: #d1d5db;
+        }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+input[type="number"] {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    width: 80px;
+}
+
+/* --- 日曆元件樣式 --- */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.day {
+    aspect-ratio: 1;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    position: relative;
+}
+
+    .day:not(.disabled):hover {
+        border-color: var(--primary);
+        background: #f3f4f6;
+    }
+
+    /* 狀態：禁用/假日/選中 */
+    .day.disabled {
+        background: #f8f9fa;
+        color: #ced4da;
+        cursor: not-allowed !important;
+        opacity: 0.6;
+    }
+
+    .day.is-holiday .day-num {
+        color: #dc3545;
+    }
+
+    /* --- 狀態：已儲存 (資料庫已有) 的樣式 --- */
+    /* 如果該日期在 alreadyShiftedSet 裡面，我們給它一個基底色 */
+    .day.is-stored {
+        border: 2px dashed var(--primary); /* 虛線框表示它是舊有的 */
+    }
+
+    /* 情況 A：資料庫已有，且目前也是選中狀態 (藍色) */
+    .day.selected.is-stored {
+        background-color: var(--primary) !important;
+        color: white !important;
+        border-style: solid;
+    }
+
+    /* 情況 B：資料庫沒有，新勾選的 (橘色) */
+    .day.selected:not(.is-stored) {
+        background-color: #f6ad55 !important; /* 溫暖的橘色 */
+        border-color: #ed8936 !important;
+        color: white !important;
+    }
+
+    /* 修改原本的 selected 樣式，確保文字顏色正確 */
+    .day.selected {
+        color: white !important;
+    }
+
+.day-num {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.day-reason {
+    font-size: 11px;
+    margin-top: 2px;
+    text-align: center;
+}
+
+.day-badge {
+    font-size: 10px;
+    background: #e0e7ff;
+    color: #4338ca;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+/* --- 標籤與狀態顯示 --- */
+.status {
+    margin: 8px 0 0 0;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+    .status.ok {
+        color: var(--success);
+    }
+
+    .status.warn {
+        color: #d97706;
+    }
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+    .badge.ok {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .badge.warn {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge:not(.ok):not(.warn) {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+.selected-list {
+    background: var(--bg-light);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+}
+
+.dates-tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tag-remove, .btn-remove-shift {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    line-height: 1;
+    margin-left: 4px;
+}
+
+/* --- 表格樣式 --- */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+    .table th {
+        background: var(--bg-light);
+        border-bottom: 2px solid var(--border);
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .table td {
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .table tr:hover {
+        background: var(--bg-light);
+    }
+
+.employee-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* --- 載入與錯誤狀態 --- */
+/* 強化錯誤提示區塊 */
+.error-box {
+    background-color: #fff5f5;
+    border-left: 5px solid #f56565;
+    color: #c53030;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* 增加動畫效果 */
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.error-icon {
+    font-size: 28px; /* 稍微放大圖示 */
+}
+
+.error-text strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #9b2c2c;
+}
+
+.error-text p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #c53030;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #c53030;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+    .btn-close:hover {
+        transform: scale(1.1);
+    }
+
+.loading, .loading-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.loading-state {
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 15px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- 響應式設計 --- */
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .header-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .table {
+        font-size: 12px;
+    }
+
+        .table th, .table td {
+            padding: 8px;
+        }
+}

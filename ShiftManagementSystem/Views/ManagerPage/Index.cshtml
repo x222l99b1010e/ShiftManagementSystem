@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "管理者視角班表管理";
+}
+
+<link rel="stylesheet" href="~/css/shift.css" />
+
+<div class="container">
+    <h2>📊 管理者視角班表管理</h2>
+
+    <div id="manager-app" class="card" v-cloak>
+        <div v-if="error" class="error-box">
+            ⚠️ {{ error }}
+        </div>
+
+        <div v-if="isLoading" class="loading">
+            載入中...
+        </div>
+
+        <div v-else>
+            <div class="header-section">
+                <div>
+                    <label>年份</label>
+                    <input type="number" v-model.number="year" min="2020" max="2050" />
+                    <label style="margin-left: 12px;">月份</label>
+                    <input type="number" v-model.number="month" min="1" max="12" style="width: 60px;" />
+                </div>
+                <button class="btn primary" v-on:click="load">載入</button>
+            </div>
+
+            <h3>🏆 排行榜</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">名次</th>
+                        <th>員工</th>
+                        <th style="width: 80px;">排班天數</th>
+                        <th style="width: 80px;">狀態</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="emp in leaderboard" :key="emp.userId">
+                        <td><b>{{ emp.rank }}</b></td>
+                        <td>{{ emp.fullName }}</td>
+                        <td>{{ emp.shiftDays }} 天</td>
+                        <td>
+                            <span v-if="emp.isCompliant" class="badge ok">✅ 符合</span>
+                            <span v-else class="badge warn">⚠️ 未達成</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid var(--border);">
+
+            <div class="header-section">
+                <h3>📈 年度統計報表 ({{ year }} 年)</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>員工姓名</th>
+                        <th style="width: 120px; text-align: center;">年度總天數</th>
+                        <th style="width: 120px; text-align: center;">月平均天數</th>
+                        <th style="width: 150px; text-align: center;">達標率 (6-15天)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="stat in yearlyStats" :key="stat.userId">
+                        <td>
+                            <span style="font-weight: 600;">{{ stat.fullName }}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="badge" style="font-size: 14px; background: #e0e7ff; color: #4338ca;">
+                                {{ stat.totalYearlyShifts }} 天
+                            </span>
+                        </td>
+                        <td style="text-align: center;">
+                            {{ stat.averageMonthlyShifts }} 天/月
+                        </td>
+                        <td style="text-align: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="flex-grow: 1; background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+                                    <div :style="{ width: stat.averageCompliancePercentage + '%', background: stat.averageCompliancePercentage >= 100 ? 'var(--success)' : 'var(--primary)' }"
+                                         style="height: 100%;"></div>
+                                </div>
+                                <span style="font-size: 12px;">{{ stat.averageCompliancePercentage }}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="yearlyStats.length === 0">
+                        <td colspan="4" class="text-muted" style="text-align: center; padding: 20px;">
+                            查無年度資料
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>📅 月班表（每日排班情況）</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">日期</th>
+                        <th style="width: 80px;">禁排</th>
+                        <th>上班員工</th>
+                        <th style="width: 60px;">人數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="d in daySchedules" :key="d.date">
+                        <td><b>{{ d.date.substring(0, 10) }}</b></td>
+                        <td>
+                            <span v-if="d.isWeekend || d.isHoliday" class="badge warn">
+                                {{ d.holidayName || '週末' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="employee-badges">
+                                <span v-for="e in d.shiftedEmployees" :key="e.userId" class="badge">
+                                    {{ e.fullName }}
+                                    <button class="btn-remove-shift"
+                                            v-on:click="removeShiftForEmployee(d.date, e.userId)"
+                                            title="刪除此排班">
+                                        ×
+                                    </button>
+                                </span>
+                            </div>
+                            <span v-if="!d.shiftedEmployees || d.shiftedEmployees.length === 0" class="text-muted">-</span>
+                        </td>
+                        <td>{{ d.currentShiftCount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js" crossorigin="anonymous"></script>
+    @* <script src="~/lib/vue/vue.global.js"></script> *@
+    <script type="module" src="~/js/app/manager/managerDashboard.js?v=@DateTime.Now.Ticks"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}

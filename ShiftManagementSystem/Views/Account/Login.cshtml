@@ -1,0 +1,17 @@
+﻿@using ShiftManagementSystem.Models.ViewModels
+@model LoginViewModel
+<div class="login-container" style="max-width: 400px; margin: 100px auto; padding: 30px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <h2 class="text-center mb-4">排班系統登入</h2>
+    <form asp-action="Login" method="post">
+        <div class="mb-3">
+            <label class="form-label">帳號</label>
+            <input asp-for="Username" class="form-control" placeholder="請輸入 emp002 或 x222l" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">密碼</label>
+            <input asp-for="Password" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">立即登入</button>
+        <div asp-validation-summary="All" class="text-danger mt-3"></div>
+    </form>
+</div>

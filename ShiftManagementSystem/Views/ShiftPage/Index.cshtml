@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "員工排班";
+}
+
+<link rel="stylesheet" href="~/css/shift.css" />
+
+<div class="container">
+    <h2>📅 員工排班（只開放下個月）</h2>
+
+    <div id="employee-app" class="card" v-cloak>
+        <div v-if="error" class="error-box">
+            <div class="error-content">
+                <span class="error-icon">🚫</span>
+                <div class="error-text">
+                    <strong>排班檢核未通過</strong>
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+            <button class="btn-close" v-on:click="error = null" title="關閉提示">✕</button>
+        </div>
+
+        <div class="header-section">
+            <div>
+                <h3>{{ year }} / {{ String(month).padStart(2,'0') }}</h3>
+                <p>已選：<b style="color: #667eea;">{{ count }}</b> 天（6–15）</p>
+                <p v-if="isValid" class="status ok">✅ 符合規範</p>
+                <p v-else class="status warn">⚠️ 請選 6–15 天</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn primary" v-on:click="submit" :disabled="!isValid || isSubmitting">
+                    {{ isSubmitting ? '送出中...' : '送出' }}
+                </button>
+                <button class="btn secondary" v-on:click="clear" :disabled="isSubmitting">清空</button>
+            </div>
+        </div>
+
+        <div class="calendar-box">
+            <div v-if="!days.length" class="loading-state">
+                <div class="spinner"></div>
+                <p>📅 日曆載入中，請稍候...</p>
+            </div>
+
+            <div v-else class="calendar-grid">
+                <div v-for="d in days" :key="d.date"
+                     class="day"
+                     :class="{
+                disabled: d.disabled,
+                selected: d.selected,
+                'is-stored': d.isStored && !d.disabled
+             }"
+                     v-on:click="d.disabled ? null : toggle(d.date)">
+
+                    <div class="day-num">{{ d.day }}</div>
+
+                    <div v-if="d.isStored && d.selected" class="day-badge" style="background:#fff; color:var(--primary)">已存檔</div>
+                    <div v-else-if="d.selected" class="day-badge" style="background:#fff; color:#ed8936">新選取</div>
+
+                    <div class="day-reason" v-if="d.disabledReason">{{ d.disabledReason }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="selectedSet.size > 0" class="selected-list">
+            <h4>已選日期</h4>
+            <div class="dates-tag">
+                <span v-for="d in Array.from(selectedSet).sort()" :key="d" class="tag">
+                    {{ d }}
+                    <button class="tag-remove" v-on:click="selectedSet.delete(d)">×</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script> *@
+    <script src="~/lib/vue/vue.global.js"></script>
+    <script type="module" src="~/js/app/employee/employeeShift.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}
