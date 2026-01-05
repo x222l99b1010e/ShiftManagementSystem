@@ -246,7 +246,7 @@ namespace ShiftManagementSystem.Services
 						UserId = emp.UserId,
 						FullName = emp.FullName,
 						TotalYearlyShifts = totalYearly,
-						AverageMonthlyShifts = (int)averageMonthly,
+						AverageMonthlyShifts = averageMonthly,
 						MonthlyBreakdown = monthlyBreakdown,
 						AverageCompliancePercentage = Math.Round(averageCompliance, 2)
 					});
