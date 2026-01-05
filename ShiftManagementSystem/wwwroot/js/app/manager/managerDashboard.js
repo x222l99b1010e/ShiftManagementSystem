@@ -1,6 +1,7 @@
 ﻿import { apiGet, apiPost, apiDelete } from '../shared/apiClient.js';
 
 const { createApp } = Vue;
+//import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
 createApp({
     data() {
