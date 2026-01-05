@@ -144,7 +144,7 @@ namespace ShiftManagementSystem.Services
 										Description = h.description,
 										IsOfficialHoliday = true,
 										CacheYear = year,
-										LastUpdatedFromApi = DateTime.UtcNow
+										LastUpdatedFromApi = DateTime.Now
 									});
 								}
 							}

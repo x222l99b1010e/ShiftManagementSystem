@@ -42,8 +42,8 @@ namespace ShiftManagementSystem.Services
 					// 修正點：使用 DateOnly.FromDateTime
 					ShiftDate = DateOnly.FromDateTime(shiftDate),
 					ShiftStatus = "Pending",
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+					CreatedAt = DateTime.Now,
+					UpdatedAt = DateTime.Now
 				};
 
 				_context.ShiftRecords.Add(shift);
@@ -201,7 +201,7 @@ namespace ShiftManagementSystem.Services
 						UserId = userId,
 						ShiftDate = DateOnly.FromDateTime(dt),
 						ShiftStatus = "Pending",
-						CreatedAt = DateTime.UtcNow
+						CreatedAt = DateTime.Now
 					});
 				}
 

@@ -327,14 +327,14 @@ namespace ShiftManagementSystem.Services
 							StatYear = year,
 							StatMonth = month,
 							TotalShiftDays = monthlyCount,
-							LastCalculatedAt = DateTime.UtcNow
+							LastCalculatedAt = DateTime.Now
 						};
 						_context.ShiftStatistics.Add(monthStat);
 					}
 					else
 					{
 						monthStat.TotalShiftDays = monthlyCount;
-						monthStat.LastCalculatedAt = DateTime.UtcNow;
+						monthStat.LastCalculatedAt = DateTime.Now;
 					}
 
 					// 年度統計
@@ -351,14 +351,14 @@ namespace ShiftManagementSystem.Services
 							StatYear = year,
 							StatMonth = null,
 							TotalShiftDays = yearlyCount,
-							LastCalculatedAt = DateTime.UtcNow
+							LastCalculatedAt = DateTime.Now
 						};
 						_context.ShiftStatistics.Add(yearStat);
 					}
 					else
 					{
 						yearStat.TotalShiftDays = yearlyCount;
-						yearStat.LastCalculatedAt = DateTime.UtcNow;
+						yearStat.LastCalculatedAt = DateTime.Now;
 					}
 				}
 
